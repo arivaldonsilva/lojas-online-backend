@@ -15,6 +15,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.nelioalves.cursomc.domain.enums.TipoCliente;
 
 @Entity
@@ -30,6 +31,7 @@ public class Cliente implements Serializable{
 	private String cpfOuCnpj;
 	private Integer tipo;// estava assim private TipoCliente tipo;, modificamos para int. É exposto o enum TipoCliente, mas internamente utilizamos o int.
 	
+	@JsonManagedReference // evita a referencia cíclica em relacionamento MxM, este lado terá os dados
 	@OneToMany(mappedBy="cliente")
 	private List<Endereco> enderecos = new ArrayList<>();
 

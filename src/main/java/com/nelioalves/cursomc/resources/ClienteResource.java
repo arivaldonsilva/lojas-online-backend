@@ -13,21 +13,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.nelioalves.cursomc.domain.Categoria;
-import com.nelioalves.cursomc.services.CategoriaService;
+import com.nelioalves.cursomc.domain.Cliente;
+import com.nelioalves.cursomc.services.ClienteService;
 import com.nelioalves.cursomc.services.exceptions.ObjectNotFoundException;
 
 @RestController
-@RequestMapping(value="/categorias")
-public class CategoriaResource {
+@RequestMapping(value="/clientes")
+public class ClienteResource {
 	
 	@Autowired
-	private CategoriaService service;
+	private ClienteService service;
 
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
 	public ResponseEntity<?> listar(@PathVariable Integer id) {
-		Categoria obj = service.buscar(id);
-		//obj.orElseThrow(() -> new ObjectNotFoundException("Objecto nao encontrado: "+id + ", Tipo: "+ Categoria.class.getName()));
+		Cliente obj = service.buscar(id);
+		//obj.orElseThrow(() -> new ObjectNotFoundException("Objecto nao encontrado: "+id + ", Tipo: "+ Cliente.class.getName()));
 		return ResponseEntity.ok(obj);
 	}
 }
