@@ -28,9 +28,7 @@ public class CategoriaResource {
 		Categoria obj = service.buscar(id).orElse(null);
 		
 		return ResponseEntity.ok(obj);
-		//Categoria c1 = new Categoria(1, "Informática");
-		//Categoria c2 = new Categoria(2, "Escritório");
-		//List<Categoria> categorias = new ArrayList<>(Arrays.asList(c1, c2));
+		
 		//return categorias;
 	}
 }
