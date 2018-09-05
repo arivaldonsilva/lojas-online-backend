@@ -3,9 +3,12 @@ package com.nelioalves.cursomc.domain;
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class ItemPedido {
 	
+	@JsonIgnore
 	@EmbeddedId
 	private ItemPedidoPK id = new ItemPedidoPK();
 
@@ -19,7 +22,7 @@ public class ItemPedido {
 		super();
 		this.id.setProduto(produto);
 		this.id.setPedido(pedido);
-		this.id = id;
+		//this.id = id;
 		this.desconto = desconto;
 		this.quantidade = quantidade;
 		this.preco = preco;
@@ -57,6 +60,7 @@ public class ItemPedido {
 		this.preco = preco;
 	}
 	
+	@JsonIgnore
 	public Pedido getPedido() {
 		return id.getPedido();
 	}
