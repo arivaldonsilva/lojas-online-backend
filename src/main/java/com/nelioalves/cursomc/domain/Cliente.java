@@ -2,7 +2,6 @@ package com.nelioalves.cursomc.domain;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -38,6 +37,10 @@ public class Cliente implements Serializable{
 	@ElementCollection
 	@CollectionTable(name="telefone")
 	private Set<String> telefones = new HashSet<>();  
+	
+	// @JsonManagedReference
+	@OneToMany(mappedBy="cliente")
+	private List<Pedido> pedidos = new ArrayList<>();
 	
 	public Cliente() {}
 
@@ -104,6 +107,10 @@ public class Cliente implements Serializable{
 
 	public void setTelefones(Set<String> telefones) {
 		this.telefones = telefones;
+	}
+	
+	public List<Pedido> getPedidos() {
+		return pedidos;
 	}
 
 	@Override
