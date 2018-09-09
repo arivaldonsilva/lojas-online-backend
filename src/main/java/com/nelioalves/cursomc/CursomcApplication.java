@@ -7,7 +7,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
+import com.nelioalves.cursomc.com.arivaldo.bolao.domain.Bolao;
+import com.nelioalves.cursomc.com.arivaldo.bolao.domain.Jogo;
+import com.nelioalves.cursomc.com.arivaldo.bolao.repositories.BolaoRepository;
+import com.nelioalves.cursomc.com.arivaldo.bolao.repositories.JogoRepository;
 import com.nelioalves.cursomc.domain.Categoria;
 import com.nelioalves.cursomc.domain.Cidade;
 import com.nelioalves.cursomc.domain.Cliente;
@@ -32,6 +39,8 @@ import com.nelioalves.cursomc.repositories.PedidoRepository;
 import com.nelioalves.cursomc.repositories.ProdutoRepository;
 
 @SpringBootApplication
+@EntityScan( basePackages = {"com.arivaldo.bolao","com.nelioalves.cursomc"} )
+@EnableJpaRepositories(basePackages = {"com.arivaldo.bolao","com.nelioalves.cursomc"})
 public class CursomcApplication implements CommandLineRunner {
 	
 	@Autowired
@@ -60,6 +69,12 @@ public class CursomcApplication implements CommandLineRunner {
 	
 	@Autowired
 	private ItemPedidoRepository itemPedidoRepository;
+	
+	@Autowired
+	private BolaoRepository bolaoRepository;
+
+	@Autowired
+	private JogoRepository jogoRepository;
 	
 	public static void main(String[] args) {
 		SpringApplication.run(CursomcApplication.class, args);
@@ -138,5 +153,20 @@ public class CursomcApplication implements CommandLineRunner {
 		p3.getItens().addAll(Arrays.asList(ip2));
 		
 		itemPedidoRepository.saveAll(Arrays.asList(ip1, ip2, ip3));
+		
+		Bolao bolao1 = new Bolao(null, "Bolao do Ernane", dtf.parse("01/09/2018 8:00"), 4, 5, 6);
+		Bolao bolao2 = new Bolao(null, "Bolao do Dudu", dtf.parse("01/08/2018 8:00"), 6, 5, 10);
+		
+		Jogo jogo1 = new Jogo(null, dtf.parse("01/09/2018 8:00"), dtf.parse("05/09/2018 20:00"), bolao1);
+		Jogo jogo2 = new Jogo(null, dtf.parse("06/09/2018 8:00"), null, bolao1);
+		Jogo jogo3 = new Jogo(null, dtf.parse("01/08/2018 8:00"),  dtf.parse("05/08/2018 20:00"), bolao2);
+		Jogo jogo4 = new Jogo(null, dtf.parse("06/08/2018 8:00"),  dtf.parse("12/08/2018 20:00"), bolao2);
+		Jogo jogo5 = new Jogo(null, dtf.parse("13/08/2018 8:00"),  dtf.parse("20/08/2018 20:00"), bolao2);
+		
+		bolao1.getJogos().addAll(Arrays.asList(jogo1, jogo2));
+		bolao2.getJogos().addAll(Arrays.asList(jogo3, jogo4, jogo5));
+		
+		bolaoRepository.saveAll(Arrays.asList(bolao1, bolao2));
+		jogoRepository.saveAll(Arrays.asList(jogo1, jogo2, jogo3, jogo4, jogo5));
 	}
 }
