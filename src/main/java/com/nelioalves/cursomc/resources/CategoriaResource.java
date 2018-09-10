@@ -28,7 +28,7 @@ public class CategoriaResource {
 	private CategoriaService service;
 
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
-	public ResponseEntity<?> listar(@PathVariable Integer id) {
+	public ResponseEntity<Categoria> find(@PathVariable Integer id) {
 		Categoria obj = service.find(id);
 		//obj.orElseThrow(() -> new ObjectNotFoundException("Objecto nao encontrado: "+id + ", Tipo: "+ Categoria.class.getName()));
 		return ResponseEntity.ok(obj);
@@ -46,6 +46,22 @@ public class CategoriaResource {
 	public ResponseEntity<Categoria> update(@RequestBody Categoria obj, @PathVariable Integer id) {
 		obj.setId(id);
 		obj = service.update(obj);
+		return ResponseEntity.noContent().build();
+	}
+	
+	/**
+	 * value="/{id}" pois tem que informar qual o id da Categoria que se quer deletar
+	 * method=RequestMethod.DELETE porque é uma exclusão
+	 * ResponseEntity<Void> - retorna ResponseEntity com corpo vazio
+	 * Recebe um id solicita a exclusão da Categoria com esse id. Gera um ObjectNotFoundException se o id não for encontrado. Retorna uma Void
+	 *  
+	 * @param id - variável passada no delete vinda de value="/{id}"
+	 * @return
+	 */
+	@RequestMapping(value="/{id}", method=RequestMethod.DELETE)
+	public ResponseEntity<Void> delete(@PathVariable Integer id) {
+		service.delete(id);
+		//obj.orElseThrow(() -> new ObjectNotFoundException("Objecto nao encontrado: "+id + ", Tipo: "+ Categoria.class.getName()));
 		return ResponseEntity.noContent().build();
 	}
 }
