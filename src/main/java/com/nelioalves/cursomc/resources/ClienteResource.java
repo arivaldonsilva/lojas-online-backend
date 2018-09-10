@@ -25,7 +25,7 @@ public class ClienteResource {
 	private ClienteService service;
 
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
-	public ResponseEntity<?> listar(@PathVariable Integer id) {
+	public ResponseEntity<Cliente> listar(@PathVariable Integer id) {
 		Cliente obj = service.buscar(id);
 		//obj.orElseThrow(() -> new ObjectNotFoundException("Objecto nao encontrado: "+id + ", Tipo: "+ Cliente.class.getName()));
 		return ResponseEntity.ok(obj);

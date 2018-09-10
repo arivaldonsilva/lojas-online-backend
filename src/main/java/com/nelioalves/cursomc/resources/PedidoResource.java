@@ -25,7 +25,7 @@ public class PedidoResource {
 	private PedidoService service;
 
 	@RequestMapping(value="/{id}", method=RequestMethod.GET)
-	public ResponseEntity<?> listar(@PathVariable Integer id) {
+	public ResponseEntity<Pedido> listar(@PathVariable Integer id) {
 		Pedido obj = service.buscar(id);
 		//obj.orElseThrow(() -> new ObjectNotFoundException("Objecto nao encontrado: "+id + ", Tipo: "+ Pedido.class.getName()));
 		return ResponseEntity.ok(obj);
