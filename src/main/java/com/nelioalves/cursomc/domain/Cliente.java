@@ -51,7 +51,7 @@ public class Cliente implements Serializable{
 		this.nome = nome;
 		this.email = email;
 		this.cpfOuCnpj = cpfOuCnpj;
-		this.tipo = tipo.getCod();// salva o codigo interno do enum
+		this.tipo = tipo == null ? null : tipo.getCod();// salva o codigo interno do enum
 	}
 
 	public Integer getId() {
