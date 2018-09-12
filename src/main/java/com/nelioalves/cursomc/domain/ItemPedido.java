@@ -69,4 +69,7 @@ public class ItemPedido {
 		return id.getProduto();
 	}
 	
+	public double getSubTotal() {
+		return (this.preco-this.desconto) * this.getQuantidade();
+	}
 }
