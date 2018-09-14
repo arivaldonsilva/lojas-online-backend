@@ -113,6 +113,14 @@ public class ClienteService {
 	}
 
 	public URI uploadProfilePicture(MultipartFile multipartFile) {
-		return s3Service.uploadFile(multipartFile);
+		
+		URI uri = s3Service.uploadFile(multipartFile);
+		
+		// Recupera o cliente com id 1 e o utiliza enquanto nao implementamos o controle de autenticacao
+		Cliente cli = repo.findById(Integer.valueOf(1)).get();
+		cli.setImageUrl(uri.toString()); // Salva a imagem como relacionado ao cliente
+		repo.save(cli);
+		
+		return uri;
 	}
 }
