@@ -8,7 +8,6 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import com.nelioalves.cursomc.com.arivaldo.bolao.domain.Bolao;
@@ -37,6 +36,7 @@ import com.nelioalves.cursomc.repositories.ItemPedidoRepository;
 import com.nelioalves.cursomc.repositories.PagamentoRepository;
 import com.nelioalves.cursomc.repositories.PedidoRepository;
 import com.nelioalves.cursomc.repositories.ProdutoRepository;
+import com.nelioalves.cursomc.services.S3Service;
 
 @SpringBootApplication
 @EntityScan( basePackages = {"com.arivaldo.bolao","com.nelioalves.cursomc"} )
@@ -193,5 +193,10 @@ public class CursomcApplication implements CommandLineRunner {
 		
 		bolaoRepository.saveAll(Arrays.asList(bolao1, bolao2));
 		jogoRepository.saveAll(Arrays.asList(jogo1, jogo2, jogo3, jogo4, jogo5));
+		
+		s3Service.uploadFile("C:\\Users\\Lenovo T430\\Pictures\\39509067_864409753946546_1319524857976717312_o.jpg");
 	}
+	
+	@Autowired
+	private S3Service s3Service;
 }

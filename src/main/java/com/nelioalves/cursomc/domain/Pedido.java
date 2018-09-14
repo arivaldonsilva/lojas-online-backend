@@ -140,5 +140,9 @@ public class Pedido implements Serializable {
 		return soma;
 	}
 	
+	public Double getValorTotalLambida() {
+		return itens.stream().mapToDouble(x -> x.getSubTotal()).sum();
+	}
+	
 	
 }
