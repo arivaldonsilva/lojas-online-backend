@@ -1,11 +1,11 @@
 package com.nelioalves.cursomc.services;
 
+import java.awt.image.BufferedImage;
 import java.net.URI;
 import java.util.List;
 
-import javax.validation.Valid;
-
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -36,6 +36,12 @@ public class ClienteService {
 	
 	@Autowired
 	private S3Service s3Service;
+	
+	@Autowired
+	ImageService imageService;
+	
+	@Value("${img.prefix.client.profile}")
+	private String prefix;
 	
 	public Cliente buscar(Integer id) {
 		return repo.findById(id).orElseThrow(() ->
@@ -112,15 +118,15 @@ public class ClienteService {
 		return cli;
 	}
 
-	public URI uploadProfilePicture(MultipartFile multipartFile) {
-		
-		URI uri = s3Service.uploadFile(multipartFile);
-		
+	public URI uploadProfilePicture(MultipartFile multipartFile) {	
 		// Recupera o cliente com id 1 e o utiliza enquanto nao implementamos o controle de autenticacao
 		Cliente cli = repo.findById(Integer.valueOf(1)).get();
-		cli.setImageUrl(uri.toString()); // Salva a imagem como relacionado ao cliente
-		repo.save(cli);
+		//cli.setImageUrl(uri.toString()); // Salva a imagem como relacionado ao cliente
 		
+		BufferedImage jpgImage = imageService.getJpgImageFromFile(multipartFile);
+		String fileName = prefix + cli.getId() + ".jpg";
+		
+		URI uri = s3Service.uploadFile(imageService.getInputStream(jpgImage, "jpg"), fileName, "image");
 		return uri;
 	}
 }
