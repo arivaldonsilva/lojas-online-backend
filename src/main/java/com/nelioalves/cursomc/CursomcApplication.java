@@ -194,9 +194,5 @@ public class CursomcApplication implements CommandLineRunner {
 		bolaoRepository.saveAll(Arrays.asList(bolao1, bolao2));
 		jogoRepository.saveAll(Arrays.asList(jogo1, jogo2, jogo3, jogo4, jogo5));
 		
-		s3Service.uploadFile("C:\\Users\\Lenovo T430\\Pictures\\39509067_864409753946546_1319524857976717312_o.jpg");
 	}
-	
-	@Autowired
-	private S3Service s3Service;
 }
