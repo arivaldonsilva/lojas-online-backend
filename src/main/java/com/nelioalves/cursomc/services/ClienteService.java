@@ -43,6 +43,9 @@ public class ClienteService {
 	@Value("${img.prefix.client.profile}")
 	private String prefix;
 	
+	@Value("${img.profile.size}")
+	private Integer size;
+	
 	public Cliente buscar(Integer id) {
 		return repo.findById(id).orElseThrow(() ->
 			new ObjectNotFoundException("Objecto nao encontrado: "+id + ", Tipo: "+ Cliente.class.getName()));
@@ -122,8 +125,14 @@ public class ClienteService {
 		// Recupera o cliente com id 1 e o utiliza enquanto nao implementamos o controle de autenticacao
 		Cliente cli = repo.findById(Integer.valueOf(1)).get();
 		//cli.setImageUrl(uri.toString()); // Salva a imagem como relacionado ao cliente
+		BufferedImage jpgImageMaior = imageService.getJpgImageFromFile(multipartFile);
+		jpgImageMaior = imageService.cropSquare(jpgImageMaior);
+		String fileNameMaior = prefix + cli.getId() + "_M" +".jpg";
+		s3Service.uploadFile(imageService.getInputStream(jpgImageMaior, "jpg"), fileNameMaior, "image");
 		
 		BufferedImage jpgImage = imageService.getJpgImageFromFile(multipartFile);
+		jpgImage = imageService.cropSquare(jpgImage);
+		jpgImage = imageService.resize(jpgImage, size);
 		String fileName = prefix + cli.getId() + ".jpg";
 		
 		URI uri = s3Service.uploadFile(imageService.getInputStream(jpgImage, "jpg"), fileName, "image");
