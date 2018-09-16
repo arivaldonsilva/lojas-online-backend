@@ -143,6 +143,26 @@ public class Pedido implements Serializable {
 	public Double getValorTotalLambida() {
 		return itens.stream().mapToDouble(x -> x.getSubTotal()).sum();
 	}
+
+//	@Override
+//	public String toString() {
+//		StringBuilder builder = new StringBuilder();
+//		builder.append("Pedido número: ");
+//		builder.append(getId());
+//		builder.append(", Instante: ");
+//		builder.append(getInstante());
+//		builder.append(", Cliente: ");
+//		builder.append(getCliente());
+//		builder.append(", Situação do pagamento: ");
+//		builder.append(getPagamento().getEstado().getDescricao());
+//		builder.append(", \nDetalhes:\n");
+//		for(ItemPedido ip : getItens()) {
+//			builder.append(ip.toString());
+//		}
+//		builder.append("Valor total: ");
+//		builder.append(getValorTotal());
+//		return builder.toString();
+//	}
 	
 	
 }

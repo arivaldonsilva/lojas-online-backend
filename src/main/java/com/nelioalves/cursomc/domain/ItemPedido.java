@@ -65,11 +65,33 @@ public class ItemPedido {
 		return id.getPedido();
 	}
 	
+	public void setPedido(Pedido pedido) {
+		id.setPedido(pedido);
+	}
+	
 	public Produto getProduto() {
 		return id.getProduto();
 	}
 	
+	public void setProduto(Produto produto) {
+		id.setProduto(produto);
+	}
+	
 	public double getSubTotal() {
 		return (this.preco-this.desconto) * this.getQuantidade();
+	}
+
+	@Override
+	public String toString() {
+		StringBuilder builder = new StringBuilder();
+		builder.append(getProduto().getNome());
+		builder.append(", Qte: ");
+		builder.append(getQuantidade());
+		builder.append(", Preço unitário: ");
+		builder.append(getPreco());
+		builder.append(", Subtotal: ");
+		builder.append(getSubTotal());
+		builder.append("\n");
+		return builder.toString();
 	}
 }
