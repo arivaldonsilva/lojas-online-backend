@@ -29,7 +29,7 @@ public class Cliente implements Serializable{
 	private Integer id;
 	private String nome;
 	
-	@Column(unique=true)
+	@Column(length=100,unique=true)
 	private String email;
 	private String cpfOuCnpj;
 	private Integer tipo;// estava assim private TipoCliente tipo;, modificamos para int. É exposto o enum TipoCliente, mas internamente utilizamos o int.
