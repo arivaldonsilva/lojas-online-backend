@@ -9,18 +9,29 @@ import javax.persistence.InheritanceType;
 import javax.persistence.JoinColumn;
 import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.nelioalves.cursomc.domain.enums.EstadoPagamento;
 
 @Entity
 @Inheritance(strategy=InheritanceType.JOINED)
 @JsonTypeInfo(use=JsonTypeInfo.Id.NAME, include=JsonTypeInfo.As.PROPERTY, property="@type")
+@JsonSubTypes({
+    @JsonSubTypes.Type(value = PagamentoComCartao.class, name = "pagamentoComCartao"),
+    @JsonSubTypes.Type(value = PagamentoComBoleto.class, name = "pagamentoComBoleto")
+})
 public abstract class Pagamento implements Serializable{
 
 	private static final long serialVersionUID = 1L;
+	
+	@Transient
+	private static final Logger LOG = LoggerFactory.getLogger(Pagamento.class);
 	
 	@Id
 	private Integer id;
@@ -33,12 +44,14 @@ public abstract class Pagamento implements Serializable{
 	@MapsId
 	private Pedido pedido;
 	
-	public Pagamento() {}
+	public Pagamento() {
+		LOG.info("Instanciando um pagamento classe pai");
+	}
 
 	public Pagamento(Integer id, EstadoPagamento estado, Pedido pedido) {
 		super();
 		this.id = id;
-		this.estado = estado == null ? null : estado.getCod();
+		this.estado = (estado == null) ? null : estado.getCod();
 		this.pedido = pedido;
 	}
 
@@ -56,6 +69,8 @@ public abstract class Pagamento implements Serializable{
 
 	public void setEstado(EstadoPagamento estado) {
 		this.estado = estado.getCod();
+		LOG.info("Setando o estado classe pai");
+		LOG.info("Estado: "+estado);
 	}
 
 	public Pedido getPedido() {

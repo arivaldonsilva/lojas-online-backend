@@ -1,8 +1,11 @@
 package com.nelioalves.cursomc.domain;
 
 import java.io.Serializable;
+import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.Locale;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -14,11 +17,12 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.Transient;
 
-import org.hibernate.cache.spi.support.AbstractReadWriteAccess.Item;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class Pedido implements Serializable {
@@ -34,7 +38,7 @@ public class Pedido implements Serializable {
 	
 	//@JsonManagedReference
 	@OneToOne(cascade=CascadeType.ALL, mappedBy="pedido")
-	private Pagamento pagamento;
+	private Pagamento pagamento = null;
 	
 	//@JsonManagedReference
 	@ManyToOne
@@ -48,7 +52,13 @@ public class Pedido implements Serializable {
 	@OneToMany(mappedBy="id.pedido")
 	private Set<ItemPedido> itens = new HashSet<>();
 	
-	public Pedido() {}
+	
+	@Transient
+	private static final Logger LOG = LoggerFactory.getLogger(Pedido.class);
+	
+	public Pedido() {
+		LOG.info("Instanciando um pedido...");
+	}
 
 	public Pedido(Integer id, Date instante, /*Pagamento pagamento,*/ Cliente cliente, Endereco enderecoDeEntrega) {
 		super();
@@ -72,7 +82,10 @@ public class Pedido implements Serializable {
 	}
 
 	public void setInstante(Date instante) {
+		LOG.info("Setando o instante");
 		this.instante = instante;
+		LOG.info("Instante setado");
+		LOG.info("Instante: "+instante);
 	}
 
 	public Pagamento getPagamento() {
@@ -80,7 +93,10 @@ public class Pedido implements Serializable {
 	}
 
 	public void setPagamento(Pagamento pagamento) {
+		LOG.info("Setando um pagamento");
 		this.pagamento = pagamento;
+		LOG.info("Pagamento setado");
+		LOG.info("Pagamento: "+pagamento.getEstado());
 	}
 
 	public Cliente getCliente() {
@@ -88,7 +104,10 @@ public class Pedido implements Serializable {
 	}
 
 	public void setCliente(Cliente cliente) {
+		LOG.info("Setando cliente");
 		this.cliente = cliente;
+		LOG.info("Cliente setado");
+		LOG.info("Cliente: "+cliente);
 	}
 
 	public Endereco getEnderecoDeEntrega() {
@@ -144,25 +163,38 @@ public class Pedido implements Serializable {
 		return itens.stream().mapToDouble(x -> x.getSubTotal()).sum();
 	}
 
-//	@Override
-//	public String toString() {
-//		StringBuilder builder = new StringBuilder();
-//		builder.append("Pedido número: ");
-//		builder.append(getId());
-//		builder.append(", Instante: ");
-//		builder.append(getInstante());
-//		builder.append(", Cliente: ");
-//		builder.append(getCliente());
-//		builder.append(", Situação do pagamento: ");
-//		builder.append(getPagamento().getEstado().getDescricao());
-//		builder.append(", \nDetalhes:\n");
-//		for(ItemPedido ip : getItens()) {
-//			builder.append(ip.toString());
-//		}
-//		builder.append("Valor total: ");
-//		builder.append(getValorTotal());
-//		return builder.toString();
-//	}
+	//@Override
+	public String imprime() {
+		NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+		StringBuilder builder = new StringBuilder();
+		builder.append("Pedido número: ");
+		builder.append(getId());
+		builder.append(", Instante: ");
+		Date inst = getInstante();
+		//if(inst != null)
+			builder.append(sdf.format(inst));
+		
+		builder.append(", Cliente: ");
+		builder.append(getCliente());
+		builder.append(", Situação do pagamento: ");
+	//	System.out.println("pagamento: "+getPagamento().getEstado());
+	//	 (obj == null) ? "null" : obj.toString();
+		Pagamento pg = getPagamento();
+		System.out.println("pg"+pg);
+		if(pg.getEstado() != null) {
+			builder.append(getPagamento().getEstado().getDescricao());
+		}
+		builder.append(", \nDetalhes:\n");
+		for(ItemPedido ip : getItens()) {
+			if(ip != null)
+				builder.append(ip.toString());
+		}
+		builder.append("Valor total: ");
+//		if(getValorTotal() != null)
+//			builder.append(nf.format(getValorTotal()));
+		return builder.toString();
+	}
 	
 	
 }

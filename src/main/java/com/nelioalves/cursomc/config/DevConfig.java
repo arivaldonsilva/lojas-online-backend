@@ -9,6 +9,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import com.nelioalves.cursomc.services.DBService;
+import com.nelioalves.cursomc.services.EmailService;
+import com.nelioalves.cursomc.services.MockEmailService;
+import com.nelioalves.cursomc.services.SmtpEmailService;
 
 @Configuration
 @Profile("dev") // Essa configuracao será utilizada somente quando o profile for dev em application.properties
@@ -29,5 +32,10 @@ public class DevConfig {
 		// Somente carrega os dados se strategy for "create"
 		dbService.instantiateTestDatabase();
 		return true;
+	}
+	
+	@Bean
+	public EmailService emailService() {
+		return new SmtpEmailService();
 	}
 }

@@ -1,13 +1,19 @@
 package com.nelioalves.cursomc.domain;
 
+import java.io.Serializable;
+import java.text.NumberFormat;
+import java.util.Locale;
+
 import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
-public class ItemPedido {
+public class ItemPedido implements Serializable {
 	
+	private static final long serialVersionUID = 1L;
+
 	@JsonIgnore
 	@EmbeddedId
 	private ItemPedidoPK id = new ItemPedidoPK();
@@ -20,8 +26,8 @@ public class ItemPedido {
 	
 	public ItemPedido(Pedido pedido, Produto produto, Double desconto, Integer quantidade, Double preco) {
 		super();
-		this.id.setProduto(produto);
-		this.id.setPedido(pedido);
+		id.setProduto(produto);
+		id.setPedido(pedido);
 		//this.id = id;
 		this.desconto = desconto;
 		this.quantidade = quantidade;
@@ -77,20 +83,59 @@ public class ItemPedido {
 		id.setProduto(produto);
 	}
 	
-	public double getSubTotal() {
-		return (this.preco-this.desconto) * this.getQuantidade();
+	public Double getSubTotal() {
+		return (preco-desconto) * quantidade;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ItemPedido other = (ItemPedido) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
 	}
 
 	@Override
 	public String toString() {
+//		StringBuilder builder = new StringBuilder();
+//		builder.append(getProduto().getNome());
+//		builder.append(", Qte: ");
+//		builder.append(getQuantidade());
+//		builder.append(", Preço unitário: ");
+//		builder.append(getPreco());
+//		builder.append(", Subtotal: ");
+//		builder.append(getSubTotal());
+//		builder.append("\n");
+//		return builder.toString();
+		
+		NumberFormat nf = NumberFormat.getCurrencyInstance(new Locale("pt", "BR"));
 		StringBuilder builder = new StringBuilder();
 		builder.append(getProduto().getNome());
 		builder.append(", Qte: ");
 		builder.append(getQuantidade());
 		builder.append(", Preço unitário: ");
-		builder.append(getPreco());
+		if(getPreco() != null)
+			builder.append(nf.format(getPreco()));
 		builder.append(", Subtotal: ");
-		builder.append(getSubTotal());
+		if(getPreco() != null && getQuantidade() != null && getDesconto() != null)
+			builder.append(nf.format(getSubTotal()));
 		builder.append("\n");
 		return builder.toString();
 	}

@@ -89,6 +89,10 @@ public class Produto implements Serializable {
 		return categorias;
 	}
 	
+	public void setCategorias(List<Categoria> categorias) {
+		this.categorias = categorias;
+	}
+	
 	public Set<ItemPedido> getItens() {
 		return itens;
 	}

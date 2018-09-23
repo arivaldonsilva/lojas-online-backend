@@ -28,7 +28,10 @@ public class ClienteNewDTO implements Serializable{
 	@NotEmpty(message="Preenchimento obrigatório")
 	private String cpfOuCnpj;
 	private Integer tipo;// estava assim private TipoCliente tipo;, modificamos para int. É exposto o enum TipoCliente, mas internamente utilizamos o int.
-	
+
+	@NotEmpty(message="Preenchimento obrigatório")
+	private String senha;
+
 	@NotEmpty(message="Preenchimento obrigatório")
 	private String logradouro;
 	
@@ -76,6 +79,14 @@ public class ClienteNewDTO implements Serializable{
 
 	public Integer getTipo() {
 		return tipo;
+	}
+
+	public String getSenha() {
+		return senha;
+	}
+
+	public void setSenha(String senha) {
+		this.senha = senha;
 	}
 
 	public void setTipo(Integer tipo) {
