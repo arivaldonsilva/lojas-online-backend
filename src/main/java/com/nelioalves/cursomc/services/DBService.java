@@ -97,6 +97,15 @@ public class DBService {
 		Produto p10 = new Produto(null, "Pendente", 180.00);
 		Produto p11 = new Produto(null, "Shampoo", 90.00);
 		
+		int inicio = 12;
+		int quantidadeProdutos = 51;
+		Produto[] p = new Produto[quantidadeProdutos - inicio];
+		for(int contador = 0; contador < quantidadeProdutos - inicio; contador++) {
+			p[contador] = new Produto(null, "Produto "+(contador+inicio), 10.00);
+			cat1.getProdutos().add(p[contador]);
+			p[contador].getCategorias().add(cat1);
+		}
+		
 		cat1.getProdutos().addAll(Arrays.asList(p1, p2, p3));
 		cat2.getProdutos().addAll(Arrays.asList(p2, p4));
 		cat3.getProdutos().addAll(Arrays.asList(p5, p6));
@@ -116,9 +125,13 @@ public class DBService {
 		p9.getCategorias().addAll(Arrays.asList(cat6));
 		p10.getCategorias().addAll(Arrays.asList(cat6));
 		p11.getCategorias().addAll(Arrays.asList(cat7));
+	
+		
 		
 		categoriaRepository.saveAll(Arrays.asList(cat1, cat2,cat3, cat4,cat5, cat6, cat7));
 		produtoRepository.saveAll(Arrays.asList(p1, p2, p3, p3, p4, p5, p6, p7, p8, p9, p10, p11));
+		
+		produtoRepository.saveAll(Arrays.asList(p));
 		
 		Estado est1 = new Estado(null, "Minas Gerais");
 		Estado est2 = new Estado(null, "Sao Paulo");
