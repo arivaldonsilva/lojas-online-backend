@@ -37,17 +37,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	@Autowired
 	private JWTUtil jwtUtil;
 	
-	public static final String[] PUBLIC_MATCHERS = {
+	private static final String[] PUBLIC_MATCHERS = {
 			"/h2-console/**"
 	};
 	
-	public static final String[] PUBLIC_MATCHERS_GET = {
+	private static final String[] PUBLIC_MATCHERS_GET = {
 			"/produtos/**",
 			"/categorias/**",
 			"/estados/**"
 	};
 
-	public static final String[] PUBLIC_MATCHERS_POST = {
+	private static final String[] PUBLIC_MATCHERS_POST = {
 			"/clientes/**",
 			"/auth/forgot/**"
 	};
@@ -62,9 +62,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 		
 		http.cors().and().csrf().disable();
 		http.authorizeRequests()
-			.antMatchers(PUBLIC_MATCHERS).permitAll() // acesso liberado PUBLIC_MATCHERS
-			.antMatchers(HttpMethod.GET, PUBLIC_MATCHERS_GET).permitAll() // permite realizar get em PUBLIC_MATCHERS_GET
 			.antMatchers(HttpMethod.POST, PUBLIC_MATCHERS_POST).permitAll()// permite a qualquer um realizar post em clientes
+			.antMatchers(HttpMethod.GET, PUBLIC_MATCHERS_GET).permitAll() // permite realizar get em PUBLIC_MATCHERS_GET
+			.antMatchers(PUBLIC_MATCHERS).permitAll() // acesso liberado PUBLIC_MATCHERS			
 			.anyRequest().authenticated();
 		http.addFilter(new JWTAuthenticationFilter(authenticationManager(), jwtUtil));
 		http.addFilter(new JWTAuthorizationFilter(authenticationManager(), jwtUtil, userDetailsService));
@@ -73,14 +73,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter{
 	
 	
 	@Override
-	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+	public void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.userDetailsService(userDetailsService).passwordEncoder(bCryptPasswordEncoder());
 	}
 	
 	@Bean
-	CorsConfigurationSource configurationSource() {
+	CorsConfigurationSource corsConfigurationSource() {
+		CorsConfiguration configuration = new CorsConfiguration().applyPermitDefaultValues();
+		configuration.setAllowedMethods(Arrays.asList("POST", "GET", "PUT", "DELETE", "OPTIONS"));
+		
 		final UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-		source.registerCorsConfiguration("/**", new CorsConfiguration().applyPermitDefaultValues());
+		source.registerCorsConfiguration("/**", configuration);
 		return source;
 	}
 	

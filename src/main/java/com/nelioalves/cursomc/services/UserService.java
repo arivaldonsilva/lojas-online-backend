@@ -8,6 +8,7 @@ public class UserService {
 
 	public static UserSS authenticated() {
 		try {
+			System.out.println("AUTENTICADO: __"+(UserSS)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 			return(UserSS)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 		}catch (Exception e) {
 			return null;

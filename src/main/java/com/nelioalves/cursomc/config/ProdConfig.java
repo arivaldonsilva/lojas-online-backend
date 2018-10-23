@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 
 import com.nelioalves.cursomc.services.DBService;
+import com.nelioalves.cursomc.services.EmailService;
+import com.nelioalves.cursomc.services.SmtpEmailService;
 
 @Configuration
 @Profile("prod") // Essa configuracao será utilizada somente quando o profile for dev em application.properties
@@ -17,17 +19,22 @@ public class ProdConfig {
 	@Autowired
 	DBService dbService;
 	
-//	@Value("${spring.jpa.hibernate.ddl-auto}") // busca qual a condicao de criacao do banco
-//	private String strategy;
+	@Value("${spring.jpa.hibernate.ddl-auto}") // busca qual a condicao de criacao do banco
+	private String strategy;
 
 	@Bean
 	public boolean instantiateDataBase() throws ParseException {
 		
-//		if(!strategy.equals("create")) {
-//			return false;
-//		}
+		if(!strategy.equals("create")) {
+			return false;
+		}
 		// Somente carrega os dados se strategy for "create"
-//		dbService.instantiateTestDatabase();
+		dbService.instantiateTestDatabase();
 		return true;
+	}
+	
+	@Bean
+	public EmailService emailService() {
+		return new SmtpEmailService();
 	}
 }
