@@ -38,8 +38,8 @@ import com.nelioalves.cursomc.repositories.ProdutoRepository;
 
 @Service
 public class DBService {
-	
-	@Autowired
+	 
+	@Autowired 
 	BCryptPasswordEncoder pe;
 
 	@Autowired
