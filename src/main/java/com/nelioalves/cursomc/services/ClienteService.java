@@ -155,7 +155,7 @@ public class ClienteService {
 	}
 
 	public URI uploadProfilePicture(MultipartFile multipartFile) {
-		// Recupera o cliente com id 1 e o utiliza enquanto nao implementamos o controle
+	/*	// Recupera o cliente com id 1 e o utiliza enquanto nao implementamos o controle
 		// de autenticacao
 		Cliente cli = repo.findById(Integer.valueOf(1)).get();
 		// cli.setImageUrl(uri.toString()); // Salva a imagem como relacionado ao
@@ -171,6 +171,19 @@ public class ClienteService {
 		String fileName = prefix + cli.getId() + ".jpg";
 
 		URI uri = s3Service.uploadFile(imageService.getInputStream(jpgImage, "jpg"), fileName, "image");
-		return uri;
+		return uri;*/
+		UserSS user = UserService.authenticated();
+
+		if (user == null) {
+			throw new AuthorizationException("Acesso negado");
+		}	
+
+		BufferedImage jpgImage = imageService.getJpgImageFromFile(multipartFile);
+		jpgImage = imageService.cropSquare(jpgImage);
+		jpgImage = imageService.resize(jpgImage, size);
+
+		String fileName = prefix + user.getId() + ".jpg";
+
+		return s3Service.uploadFile(imageService.getInputStream(jpgImage, "jpg"), fileName, "image/jpg");
 	}
 }
