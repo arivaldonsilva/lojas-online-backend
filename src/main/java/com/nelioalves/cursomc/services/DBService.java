@@ -22,6 +22,7 @@ import com.nelioalves.cursomc.domain.Pedido;
 import com.nelioalves.cursomc.domain.Produto;
 import com.nelioalves.cursomc.domain.enums.EstadoPagamento;
 import com.nelioalves.cursomc.domain.enums.Perfil;
+import com.nelioalves.cursomc.domain.enums.StatusLoja;
 import com.nelioalves.cursomc.domain.enums.TipoCliente;
 import com.nelioalves.cursomc.repositories.CategoriaRepository;
 import com.nelioalves.cursomc.repositories.CidadeRepository;
@@ -72,9 +73,9 @@ public class DBService {
 	
 	public void instantiateTestDatabase() throws ParseException {
 		
-		Loja loja1 = new Loja(null, "Elma Calçados");
-		Loja loja2 = new Loja(null, "Parque das Palmeiras");
-		Loja loja3 = new Loja(null, "Nelio Artigos");
+		Loja loja1 = new Loja(null, "Elma Calçados", StatusLoja.ATIVO);
+		Loja loja2 = new Loja(null, "Parque das Palmeiras", StatusLoja.ATIVO);
+		Loja loja3 = new Loja(null, "Nelio Artigos", StatusLoja.ATIVO);
 		
 		Categoria cat1 = new Categoria(null, "Informática");
 		Categoria cat2 = new Categoria(null, "Escritório");

@@ -7,6 +7,7 @@ import javax.validation.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Length;
 
 import com.nelioalves.cursomc.domain.Loja;
+import com.nelioalves.cursomc.domain.enums.StatusLoja;
 
 public class LojaDTO implements Serializable{
 
@@ -18,12 +19,15 @@ public class LojaDTO implements Serializable{
 	@Length(min=5, max=50, message="O tamanho deve ser entre 5 e 50 caracteres")
 	private String nome;
 	
+	private StatusLoja situacao;
+	
 	public LojaDTO() {}
 
 	public LojaDTO(Loja loja) {
 		super();
 		this.id = loja.getId();
 		this.nome = loja.getNome();
+		this.setSituacao(loja.getSituacao());
 	}
 
 	public Integer getId() {
@@ -41,6 +45,15 @@ public class LojaDTO implements Serializable{
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
+
+	public StatusLoja getSituacao() {
+		return situacao;
+	}
+
+	public void setSituacao(StatusLoja situacao) {
+		this.situacao = situacao;
+	}
+	
 	
 	
 }

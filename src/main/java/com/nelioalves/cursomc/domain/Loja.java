@@ -10,6 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.nelioalves.cursomc.domain.enums.StatusLoja;
+
 @Entity
 public class Loja implements Serializable {
 
@@ -21,15 +23,18 @@ public class Loja implements Serializable {
 	
 	private String nome;
 	
+	private Integer situacao; // 1 indica que está ativa, 2 significa que está inativa
+	
 	@OneToMany(mappedBy="loja")
 	private List<Produto> produtos = new ArrayList<>();
 	
 	public Loja() {}
 
-	public Loja(Integer id, String nome) {
+	public Loja(Integer id, String nome, StatusLoja situacao) {
 		super();
 		this.id = id;
 		this.nome = nome;
+		this.situacao = situacao == null ? null : situacao.getCod();
 	}
 
 	public Integer getId() {
@@ -52,6 +57,14 @@ public class Loja implements Serializable {
 		return produtos;
 	}
 
+	public StatusLoja getSituacao() {
+		return StatusLoja.toEnum(situacao);
+	}
+
+	public void setSituacao(StatusLoja situacao) {
+		this.situacao = situacao.getCod();
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -76,4 +89,5 @@ public class Loja implements Serializable {
 			return false;
 		return true;
 	}
+
 }
