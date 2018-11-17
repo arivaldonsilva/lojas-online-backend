@@ -1,7 +1,11 @@
 package com.nelioalves.cursomc.dto;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
+import com.nelioalves.cursomc.domain.Categoria;
+import com.nelioalves.cursomc.domain.Loja;
 import com.nelioalves.cursomc.domain.Produto;
 
 public class ProdutoDTO implements Serializable{
@@ -12,12 +16,17 @@ public class ProdutoDTO implements Serializable{
 	private String nome;
 	private Double preco;
 	
+	private List<Categoria> categorias = new ArrayList<>(); // cria uma lista categoria para um produto
+	
+	private Loja loja;
+	
 	public ProdutoDTO() {}
 	
 	public ProdutoDTO(Produto obj) {
 		id = obj.getId();
 		nome = obj.getNome();
 		preco = obj.getPreco();
+		loja = obj.getLoja();
 	}
 
 	public Integer getId() {
@@ -42,6 +51,18 @@ public class ProdutoDTO implements Serializable{
 
 	public void setPreco(Double preco) {
 		this.preco = preco;
+	}
+
+	public List<Categoria> getCategorias() {
+		return categorias;
+	}
+
+	public Loja getLoja() {
+		return loja;
+	}
+
+	public void setLoja(Loja loja) {
+		this.loja = loja;
 	}
 	
 	

@@ -13,6 +13,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -43,13 +44,19 @@ public class Produto implements Serializable {
 	@OneToMany(mappedBy="id.produto")
 	private Set<ItemPedido> itens = new HashSet<>();
 	
+	@JsonIgnore
+	@ManyToOne
+	@JoinColumn(name="loja_id")
+	private Loja loja;
+	
 	public Produto() {}
 
-	public Produto(Integer id, String nome, Double preco) {
+	public Produto(Integer id, String nome, Double preco, Loja loja) {
 		super();
 		this.id = id;
 		this.nome = nome;
 		this.preco = preco;
+		this.loja = loja;
 	}
 	
 	@JsonIgnore
@@ -100,6 +107,15 @@ public class Produto implements Serializable {
 	public void setItens(Set<ItemPedido> itens) {
 		this.itens = itens;
 	}
+	
+	public Loja getLoja() {
+		return loja;
+	}
+
+	public void setLoja(Loja loja) {
+		this.loja = loja;
+	}
+
 
 	@Override
 	public int hashCode() {

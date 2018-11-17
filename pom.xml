@@ -5,12 +5,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.nelioalves.cursomc</groupId>
-	<artifactId>cursomc</artifactId>
+	<artifactId>sicol</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>cursomc</name>
-	<description>Estudo de caso java para curso com modelagem conceitual com UML</description>
+	<name>sicol</name>
+	<description>Sistema de compras online</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>

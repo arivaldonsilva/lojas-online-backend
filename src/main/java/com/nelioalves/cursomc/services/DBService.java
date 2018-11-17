@@ -8,16 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.nelioalves.cursomc.com.arivaldo.bolao.domain.Bolao;
-import com.nelioalves.cursomc.com.arivaldo.bolao.domain.Jogo;
-import com.nelioalves.cursomc.com.arivaldo.bolao.repositories.BolaoRepository;
-import com.nelioalves.cursomc.com.arivaldo.bolao.repositories.JogoRepository;
 import com.nelioalves.cursomc.domain.Categoria;
 import com.nelioalves.cursomc.domain.Cidade;
 import com.nelioalves.cursomc.domain.Cliente;
 import com.nelioalves.cursomc.domain.Endereco;
 import com.nelioalves.cursomc.domain.Estado;
 import com.nelioalves.cursomc.domain.ItemPedido;
+import com.nelioalves.cursomc.domain.Loja;
 import com.nelioalves.cursomc.domain.Pagamento;
 import com.nelioalves.cursomc.domain.PagamentoComBoleto;
 import com.nelioalves.cursomc.domain.PagamentoComCartao;
@@ -32,6 +29,7 @@ import com.nelioalves.cursomc.repositories.ClienteRepository;
 import com.nelioalves.cursomc.repositories.EnderecoRepository;
 import com.nelioalves.cursomc.repositories.EstadoRepository;
 import com.nelioalves.cursomc.repositories.ItemPedidoRepository;
+import com.nelioalves.cursomc.repositories.LojaRepository;
 import com.nelioalves.cursomc.repositories.PagamentoRepository;
 import com.nelioalves.cursomc.repositories.PedidoRepository;
 import com.nelioalves.cursomc.repositories.ProdutoRepository;
@@ -70,39 +68,54 @@ public class DBService {
 	private ItemPedidoRepository itemPedidoRepository;
 	
 	@Autowired
-	private BolaoRepository bolaoRepository;
-
-	@Autowired
-	private JogoRepository jogoRepository;
+	private LojaRepository lojaRepository;
 	
 	public void instantiateTestDatabase() throws ParseException {
+		
+		Loja loja1 = new Loja(null, "Elma Calçados");
+		Loja loja2 = new Loja(null, "Parque das Palmeiras");
+		Loja loja3 = new Loja(null, "Nelio Artigos");
 		
 		Categoria cat1 = new Categoria(null, "Informática");
 		Categoria cat2 = new Categoria(null, "Escritório");
 		Categoria cat3 = new Categoria(null, "Cama, Mesa e Banho");
 		Categoria cat4 = new Categoria(null, "Eletrônicos");
 		Categoria cat5 = new Categoria(null, "Jardinagem");
-		Categoria cat6 = new Categoria(null, "Decoração");
+		Categoria cat6 = new Categoria(null, "Vasos & Decoração");
 		Categoria cat7 = new Categoria(null, "Perfumaria");
 		
-		Produto p1 = new Produto(null, "Computador", 2000.0);
-		Produto p2 = new Produto(null, "Impressora", 800.0);
-		Produto p3 = new Produto(null, "Mouse", 80.0);
-		Produto p4 = new Produto(null, "Mesa de Escritório", 300.00);
-		Produto p5 = new Produto(null, "Toalha", 50.00);
-		Produto p6 = new Produto(null, "Colcha", 200.00);
-		Produto p7 = new Produto(null, "TV true color", 1200.00);
-		Produto p8 = new Produto(null, "Roçadeira", 800.00);
-		Produto p9 = new Produto(null, "Abajour", 100.00);
-		Produto p10 = new Produto(null, "Pendente", 180.00);
-		Produto p11 = new Produto(null, "Shampoo", 90.00);
+		Produto p1 = new Produto(null, "Computador", 2000.0, loja3);
+		Produto p2 = new Produto(null, "Impressora", 800.0, loja3);
+		Produto p3 = new Produto(null, "Mouse", 80.0, loja3);
+		Produto p4 = new Produto(null, "Mesa de Escritório", 300.00, loja3);
+		Produto p5 = new Produto(null, "Toalha", 50.00, loja3);
+		Produto p6 = new Produto(null, "Colcha", 200.00, loja3);
+		Produto p7 = new Produto(null, "TV true color", 1200.00, loja3);
+		Produto p8 = new Produto(null, "Roçadeira", 800.00, loja3);
+		Produto p9 = new Produto(null, "Abajour", 100.00, loja3);
+		Produto p10 = new Produto(null, "Pendente", 180.00, loja3);
+		Produto p11 = new Produto(null, "Shampoo", 90.00, loja3);
 		
-		int inicio = 12;
+		loja3.getProdutos().addAll(Arrays.asList(p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11));
+		
+		double margem = 1.7;
+		
+		Produto p12 = new Produto(null, "Vaso Malta Bowl 56 x 17 cm", 40.00 * margem, loja2);
+		
+		Produto p13 = new Produto(null, "Vaso Terra Cone 30 x 40 cm", 40.00 * margem, loja2);
+		Produto p14 = new Produto(null, "Vaso Terra Cone 38 x 55 cm", 65.50 * margem, loja2);
+		Produto p15 = new Produto(null, "Vaso Terra Cone 48 x 76 cm", 93.00 * margem, loja2);
+		Produto p16 = new Produto(null, "Vaso Terra Cone 55 x 46 cm", 76.50 * margem, loja2);
+		
+		loja2.getProdutos().addAll(Arrays.asList(p12,p13,p14,p15,p16));
+		
+		int inicio = 17;
 		int quantidadeProdutos = 51;
 		Produto[] p = new Produto[quantidadeProdutos - inicio];
 		for(int contador = 0; contador < quantidadeProdutos - inicio; contador++) {
-			p[contador] = new Produto(null, "Produto "+(contador+inicio), 10.00);
+			p[contador] = new Produto(null, "Produto "+(contador+inicio), 10.00, loja1);
 			cat1.getProdutos().add(p[contador]);
+			loja1.getProdutos().add(p[contador]);
 			p[contador].getCategorias().add(cat1);
 		}
 		
@@ -113,6 +126,8 @@ public class DBService {
 		cat5.getProdutos().addAll(Arrays.asList(p8));
 		cat6.getProdutos().addAll(Arrays.asList(p9, p10));
 		cat7.getProdutos().addAll(Arrays.asList(p11));
+		
+		cat6.getProdutos().addAll(Arrays.asList(p12, p13, p14, p15, p16));
 		
 		p1.getCategorias().addAll(Arrays.asList(cat1, cat4));
 		p2.getCategorias().addAll(Arrays.asList(cat1, cat2, cat4));
@@ -125,11 +140,20 @@ public class DBService {
 		p9.getCategorias().addAll(Arrays.asList(cat6));
 		p10.getCategorias().addAll(Arrays.asList(cat6));
 		p11.getCategorias().addAll(Arrays.asList(cat7));
+		
+		p12.getCategorias().addAll(Arrays.asList(cat6));
+		p13.getCategorias().addAll(Arrays.asList(cat6));
+		p14.getCategorias().addAll(Arrays.asList(cat6));
+		p15.getCategorias().addAll(Arrays.asList(cat6));
+		p16.getCategorias().addAll(Arrays.asList(cat6));
 	
 		
+		lojaRepository.saveAll(Arrays.asList(loja1, loja2, loja3));
 		
 		categoriaRepository.saveAll(Arrays.asList(cat1, cat2,cat3, cat4,cat5, cat6, cat7));
 		produtoRepository.saveAll(Arrays.asList(p1, p2, p3, p3, p4, p5, p6, p7, p8, p9, p10, p11));
+		
+		produtoRepository.saveAll(Arrays.asList(p12, p13, p14, p15, p16));
 		
 		produtoRepository.saveAll(Arrays.asList(p));
 		
@@ -194,19 +218,5 @@ public class DBService {
 		
 		itemPedidoRepository.saveAll(Arrays.asList(ip1, ip2, ip3));
 		
-		Bolao bolao1 = new Bolao(null, "Bolao do Ernane", dtf.parse("01/09/2018 8:00"), 4, 5, 6);
-		Bolao bolao2 = new Bolao(null, "Bolao do Dudu", dtf.parse("01/08/2018 8:00"), 6, 5, 10);
-		
-		Jogo jogo1 = new Jogo(null, dtf.parse("01/09/2018 8:00"), dtf.parse("05/09/2018 20:00"), bolao1);
-		Jogo jogo2 = new Jogo(null, dtf.parse("06/09/2018 8:00"), null, bolao1);
-		Jogo jogo3 = new Jogo(null, dtf.parse("01/08/2018 8:00"),  dtf.parse("05/08/2018 20:00"), bolao2);
-		Jogo jogo4 = new Jogo(null, dtf.parse("06/08/2018 8:00"),  dtf.parse("12/08/2018 20:00"), bolao2);
-		Jogo jogo5 = new Jogo(null, dtf.parse("13/08/2018 8:00"),  dtf.parse("20/08/2018 20:00"), bolao2);
-		
-		bolao1.getJogos().addAll(Arrays.asList(jogo1, jogo2));
-		bolao2.getJogos().addAll(Arrays.asList(jogo3, jogo4, jogo5));
-		
-		bolaoRepository.saveAll(Arrays.asList(bolao1, bolao2));
-		jogoRepository.saveAll(Arrays.asList(jogo1, jogo2, jogo3, jogo4, jogo5));
 	}
 }
