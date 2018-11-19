@@ -19,7 +19,7 @@ public class LojaDTO implements Serializable{
 	@Length(min=5, max=50, message="O tamanho deve ser entre 5 e 50 caracteres")
 	private String nome;
 	
-	private StatusLoja situacao;
+	private Integer situacao;
 	
 	public LojaDTO() {}
 
@@ -27,7 +27,7 @@ public class LojaDTO implements Serializable{
 		super();
 		this.id = loja.getId();
 		this.nome = loja.getNome();
-		this.setSituacao(loja.getSituacao());
+		this.situacao = loja.getSituacao().getCod();
 	}
 
 	public Integer getId() {
@@ -46,11 +46,11 @@ public class LojaDTO implements Serializable{
 		this.nome = nome;
 	}
 
-	public StatusLoja getSituacao() {
+	public Integer getSituacao() {
 		return situacao;
 	}
 
-	public void setSituacao(StatusLoja situacao) {
+	public void setSituacao(Integer situacao) {
 		this.situacao = situacao;
 	}
 	
