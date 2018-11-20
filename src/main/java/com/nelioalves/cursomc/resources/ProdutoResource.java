@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.nelioalves.cursomc.domain.Categoria;
@@ -82,5 +83,11 @@ public class ProdutoResource {
 		obj.setId(id);// altera o dto para conter o código do produto que será alterado
 		obj = service.update(obj);
 		return ResponseEntity.noContent().build();
+	}
+	
+	@RequestMapping(value="/picture/{id}", method=RequestMethod.POST)
+	public ResponseEntity<Void> uploadProfilePicture(@RequestParam(name="file") MultipartFile multipartFile, @PathVariable Integer id){
+		URI uri = service.uploadProdutoPicture(multipartFile, id);
+		return ResponseEntity.created(uri).build();
 	}
 }

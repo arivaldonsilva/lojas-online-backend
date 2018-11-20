@@ -1,20 +1,26 @@
 package com.nelioalves.cursomc.services;
 
+import java.awt.image.BufferedImage;
+import java.net.URI;
 import java.util.List;
 
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.nelioalves.cursomc.domain.Categoria;
 import com.nelioalves.cursomc.domain.Produto;
 import com.nelioalves.cursomc.dto.ProdutoDTO;
 import com.nelioalves.cursomc.repositories.CategoriaRepository;
 import com.nelioalves.cursomc.repositories.ProdutoRepository;
+import com.nelioalves.cursomc.security.UserSS;
+import com.nelioalves.cursomc.services.exceptions.AuthorizationException;
 import com.nelioalves.cursomc.services.exceptions.ObjectNotFoundException;
 
 @Service
@@ -25,6 +31,24 @@ public class ProdutoService {
 	
 	@Autowired
 	private CategoriaRepository categoriaRepository;
+	
+	@Autowired
+	private S3Service s3Service;
+
+	@Autowired
+	ImageService imageService;
+
+	@Value("${img.prefix.produto}")
+	private String prefixProduto;
+	
+	@Value("${img.prefix.produto.miniatura}")
+	private String prefixProdutoMiniatura;
+
+	@Value("${img.size.produto}")
+	private Integer sizeProduto;
+	
+	@Value("${img.size.produto.miniatura}")
+	private Integer sizeProdutoMiniatura;
 	
 	public Produto buscar(Integer id) {
 		return repo.findById(id).orElseThrow(() ->
@@ -79,5 +103,42 @@ public class ProdutoService {
 		Produto prod = buscar(obj.getId()); // recupera o produto do id passado por parametro
 		updateData(prod, obj);
 		return repo.save(prod);
+	}
+	
+	/**
+	 * Salva uma imagem associada a um produto no bucket
+	 * @param multipartFile
+	 * @return
+	 */
+	public URI uploadProdutoPicture(MultipartFile multipartFile, Integer id) {
+		/*	// Recupera o cliente com id 1 e o utiliza enquanto nao implementamos o controle
+			// de autenticacao
+			Cliente cli = repo.findById(Integer.valueOf(1)).get();
+			// cli.setImageUrl(uri.toString()); // Salva a imagem como relacionado ao
+			// cliente
+			BufferedImage jpgImageMaior = imageService.getJpgImageFromFile(multipartFile);
+			jpgImageMaior = imageService.cropSquare(jpgImageMaior);
+			String fileNameMaior = prefix + cli.getId() + "_M" + ".jpg";
+			s3Service.uploadFile(imageService.getInputStream(jpgImageMaior, "jpg"), fileNameMaior, "image");
+
+			BufferedImage jpgImage = imageService.getJpgImageFromFile(multipartFile);
+			jpgImage = imageService.cropSquare(jpgImage);
+			jpgImage = imageService.resize(jpgImage, size);
+			String fileName = prefix + cli.getId() + ".jpg";
+
+			URI uri = s3Service.uploadFile(imageService.getInputStream(jpgImage, "jpg"), fileName, "image");
+			return uri;*/
+		UserSS user = UserService.authenticated();
+
+		if (user == null) {
+			throw new AuthorizationException("Acesso negado");
+		}	
+		
+		BufferedImage jpgImage = imageService.getJpgImageFromFile(multipartFile);
+		jpgImage = imageService.cropSquare(jpgImage);
+		jpgImage = imageService.resize(jpgImage, sizeProduto);
+		String fileName = prefixProduto +id + ".jpg";
+
+		return s3Service.uploadFile(imageService.getInputStream(jpgImage, "jpg"), fileName, "image/jpg");
 	}
 }
